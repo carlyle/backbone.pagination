@@ -1,4 +1,4 @@
-Backbone PaginatedCollection
-============================
+Backbone Pagination
+===================
 
-Adds pagination support to Backbone Collections
+Adds pagination support to Backbone
