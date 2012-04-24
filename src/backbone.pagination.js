@@ -1,19 +1,20 @@
 (function() {
-  var results_object_name = 'results',
-      pagination_object_name = 'pagination',
+  var results_object_name     = 'results',
+      pagination_object_name  = 'pagination',
+      page_parameter          = 'page',
 
       pagination_object_map = {
-        page:           'page',
-        pages:          'page_count',
-        per_page:       'per_page',
-        total_results:  'result_count'
+        page          : 'page',
+        pages         : 'page_count',
+        per_page      : 'per_page',
+        total_results : 'result_count'
       },
 
       pagination_default_values = {
-        page:           1,
-        pages:          1,
-        per_page:       10,
-        total_results:  0;
+        page          : 1,
+        pages         : 1,
+        per_page      : 10,
+        total_results : 0
       };
 
   Backbone.PaginatedCollection = Backbone.Collection.extend({
@@ -32,6 +33,24 @@
       this._updatePaginationInfo(response[pagination_object_name]);
 
       return response[results_object_name];
+    },
+
+    fetchNextPage: function(options) {
+      options = options || {};
+      options.add = true;
+
+      return this._fetchPage(this.page + 1, options);
+    },
+
+    _fetchPage: function(page_number, options) {
+      if (page_number < 1)          throw 'Cannot fetch a page less than 1';
+      if (this.pages < page_number) throw 'Cannot fetch a page greater than the total number of pages (' + this.pages + ')';
+
+      options = options || {};
+      options.data = options.data || {};
+      options.data[page_parameter] = page_number;
+
+      return this.fetch(options);
     },
 
     _updatePaginationInfo: function(info) {
