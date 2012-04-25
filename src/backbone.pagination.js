@@ -35,6 +35,17 @@
       return response[results_object_name];
     },
 
+    onPage: function(page_number) {
+      if (page_number < 1)          throw 'Cannot show a page less than 1';
+      if (this.page < page_number)  throw 'Cannot show a page that hasn\'t been fetched yet';
+      if (this.pages < page_number) throw 'Cannot show a page greater than the total number of (' + this.pages + ')';
+
+      var begin = (page_number - 1) * this.per_page,
+          end   = begin + this.per_page;
+
+      return this.models.slice(begin, end);
+    },
+
     fetchNextPage: function(options) {
       options = options || {};
       options.add = true;
