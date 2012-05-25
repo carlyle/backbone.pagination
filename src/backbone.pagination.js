@@ -29,6 +29,10 @@
   });
 
   _.extend(Backbone.PaginatedCollection.prototype, {
+    isComplete: function() {
+      return (this.length === this.total_results);
+    },
+
     parse: function(response, request) {
       this._updatePaginationInfo(response[pagination_object_name]);
 
